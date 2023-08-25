@@ -29,11 +29,12 @@ function getProjectOfferBuilderId(){
 	return 'AKfycbxLd8xhZr50zDC-evluIkbjWtO9TnnTw6pK8DIxxBB8DEuVWyIdhQdB78siVb2PBp6J_A'; // RENTING
 
 }
+
 function processNewDiscoveryCallForm() {
 
 	// Define Constants
     const SHEET = getSheet();
-    
+
     var headersRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues();
 	const lastRow = sheet.getLastRow() - 1;
 
