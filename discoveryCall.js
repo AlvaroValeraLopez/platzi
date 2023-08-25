@@ -1,35 +1,40 @@
-function testWhatsApp() {
-	const ss = SpreadsheetApp.openById('1xbSm2BXSMljVk6ZTJwVO5Wk1OjFQAZGm40SYpe7MBXk');
-	const sheet = ss.getSheetByName('Discovery Call');
-	var headersRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues();
-	const lastRow = sheet.getLastRow() - 1;
+function getSheet(){
 
-	const discovery_call_form_outputCol = headersRow[0].indexOf('discovery_call_form_output') + 1;
-	if (discovery_call_form_outputCol == 0) {
-		Samara.columnNotFound('discovery_call_form_output', ss);
-		return 'Error: columnNotFound(discovery_call_form_output)';
-	} else {
-		var discovery_call_form_output_Array = sheet.getRange(2, discovery_call_form_outputCol, lastRow, 1).getValues();
-	}
+    const spreadSheetId= '1xbSm2BXSMljVk6ZTJwVO5Wk1OjFQAZGm40SYpe7MBXk';
+    const sheetName = 'Discovery Call';
 
-	for (var i = discovery_call_form_output_Array.length - 1; i > 0; i--) {
-		var discovery_call_form_output = discovery_call_form_output_Array[i][0];
-		var discovery_call_form_output_json = JSON.parse(discovery_call_form_output);
-		var whatsapp_contact_method = discovery_call_form_output_json.body.whatsapp_contact_method;
-		Logger.log(whatsapp_contact_method);
-	}
+    return SpreadsheetApp.openById(spreadSheetId).getSheetByName(sheetName);
+
 }
 
-function testTimeFunction() {
-	const timeZone = Session.getScriptTimeZone();
-	Logger.log(timezone);
+function getOfferBuilderTemplateId(){
+    // "1qzh3Q6SToDLntN8MSEOibQmOJ2vu3C2qoGTpGYfvrGg"; // 10.2
+	// "1Fn9ByQfbOevG8JZA3K4sXQe3weiJXdvs7ahTLYKZ-Pw" // 10.3
+	// "1bu2YmZU3ghCsaEbi3C1iHzyPfWWD86jFjahM8joevpo" // 10.4 Campaña wallbox y EV standalone
+	// "1q_SDHiFnwM4ShEjdVHW7peQIe3Px3kC88onEuF-0yQ0" //RENTING
+	return '1Pe23c7nnTrqes-Tm3QIDAEcgCldLiejyQKvSk6TftGg'; //Iva reducido
 }
 
+function getProposalSlidesTemplateId(){
+	// "11uBe64NkxONq5O7mf8_v8qegDwVs5HFlaQ-SJwkvoPY"; //4.2 slide Boviet
+	// "1p6P2GV9e5V9KQTpgxNZVFBnahfKCIcq8nqiPbJIw8zA"; //4.3 Tesla
+	// "1ih0dJtdjUwLpQkz5qXM9BKHe31ml__vWeoaXFfZxuCI"; //4.4 Campaña wallbos y EV standalone
+	return '1jQ2B0kIUHQKY6__3tvkGGKT5wTT_A2-mwY18FxkU5Nc'; //RENTING
+}
+
+function getProjectOfferBuilderId(){
+    // "AKfycbwNG6rlSTvknArw2KTN3b-0geHuDkOIlnoT7K-SXgNfsvQhVI3sQrBeZNWTWhOAr6vUVg"; // BOVIET PANELS
+	// "AKfycbwGR3_SjFqBsBrek668p5knPeSCTrCZLyr-ky06PNPKYWDsUXpOEtyVVT_PPL0zhGlgwA"; //tesla
+	// "AKfycbyo1dmtvurb_dnpPjuwpOwLsROgMRegKLtcoSgZag_wHhfZvGkTPrGz5Znh8wNCXivTqQ"; // Wallbox y standalone
+	return 'AKfycbxLd8xhZr50zDC-evluIkbjWtO9TnnTw6pK8DIxxBB8DEuVWyIdhQdB78siVb2PBp6J_A'; // RENTING
+
+}
 function processNewDiscoveryCallForm() {
+
 	// Define Constants
-	const ss = SpreadsheetApp.openById('1xbSm2BXSMljVk6ZTJwVO5Wk1OjFQAZGm40SYpe7MBXk');
-	const sheet = ss.getSheetByName('Discovery Call');
-	var headersRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues();
+    const SHEET = getSheet();
+    
+    var headersRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues();
 	const lastRow = sheet.getLastRow() - 1;
 
 	const discoveryCallProcessClosedCol = headersRow[0].indexOf('Discovery Call Process Closed') + 1;
@@ -46,26 +51,12 @@ function processNewDiscoveryCallForm() {
     return 'Kill Signal Issued';
   }*/
 
-	// Define Constants
-
-	//const offer_builder_template_ID = "1qzh3Q6SToDLntN8MSEOibQmOJ2vu3C2qoGTpGYfvrGg"; // 10.2
-	// var offer_builder_template_ID = "1Fn9ByQfbOevG8JZA3K4sXQe3weiJXdvs7ahTLYKZ-Pw" // 10.3
-	//const offer_builder_template_ID = "1bu2YmZU3ghCsaEbi3C1iHzyPfWWD86jFjahM8joevpo" // 10.4 Campaña wallbox y EV standalone
-	//const offer_builder_template_ID = "1q_SDHiFnwM4ShEjdVHW7peQIe3Px3kC88onEuF-0yQ0" //RENTING
-	const offer_builder_template_ID = '1Pe23c7nnTrqes-Tm3QIDAEcgCldLiejyQKvSk6TftGg'; //Iva reducido
-
 	// WARNING: Keep updated the offer_builder_id at autoRefreshDBs() on WebApp: Offer Builder Toolbox (https://script.google.com/home/projects/1pPfVGp2AKv2svIq8w2cDLh7v1QlMh1A1BZkrsku5iD4RRBkICqFqlL5i/edit)
-	const offer_builder_version = '10.7';
+	const OFFER_BUILDER_VERSION = '10.7';
 
-	//const proposal_slides_template_ID = "11uBe64NkxONq5O7mf8_v8qegDwVs5HFlaQ-SJwkvoPY";//4.2 slide Boviet
-	// var proposal_slides_template_ID = "1p6P2GV9e5V9KQTpgxNZVFBnahfKCIcq8nqiPbJIw8zA"; //4.3 Tesla
-	//const proposal_slides_template_ID = "1ih0dJtdjUwLpQkz5qXM9BKHe31ml__vWeoaXFfZxuCI"; //4.4 Campaña wallbos y EV standalone
-	const proposal_slides_template_ID = '1jQ2B0kIUHQKY6__3tvkGGKT5wTT_A2-mwY18FxkU5Nc'; //RENTING
-
-	//const project_offer_builder_id ="AKfycbwNG6rlSTvknArw2KTN3b-0geHuDkOIlnoT7K-SXgNfsvQhVI3sQrBeZNWTWhOAr6vUVg"; // BOVIET PANELS
-	//const project_offer_builder_id = "AKfycbwGR3_SjFqBsBrek668p5knPeSCTrCZLyr-ky06PNPKYWDsUXpOEtyVVT_PPL0zhGlgwA"; //tesla
-	//const project_offer_builder_id = "AKfycbyo1dmtvurb_dnpPjuwpOwLsROgMRegKLtcoSgZag_wHhfZvGkTPrGz5Znh8wNCXivTqQ"; // Wallbox y standalone
-	const project_offer_builder_id = 'AKfycbxLd8xhZr50zDC-evluIkbjWtO9TnnTw6pK8DIxxBB8DEuVWyIdhQdB78siVb2PBp6J_A'; // RENTING
+	const OFFER_BUILDER_TEMPLATE_ID = getOfferBuilderTemplateId();
+	const PROPOSAL_SLIDES_TEMPLATE_ID = getProposalSlidesTemplateId();
+	const PROJECT_OFFER_BUILDER_ID = getProjectOfferBuilderId();
 
 	const groupEmail = 'energyadvisors@samara.energy';
 	//const groupEmail = 'everyone@samara.energy';
@@ -624,18 +615,18 @@ function processNewDiscoveryCallForm() {
 					var projectFolderUrl = DriveApp.getFolderById(deal_folder_structure.deal_folder_id).getUrl();
 
 					var offer_builder_id = Samara.copy_files(
-						offer_builder_template_ID,
-						`Offer Builder ${offer_builder_version} - ${dealname}`,
+						OFFER_BUILDER_TEMPLATE_ID,
+						`Offer Builder ${OFFER_BUILDER_VERSION} - ${dealname}`,
 						deal_folder_structure.samara_proposal.editables_folder_id,
 					);
 					var proposal_slides_id = Samara.copy_files(
-						proposal_slides_template_ID,
+						PROPOSAL_SLIDES_TEMPLATE_ID,
 						'Template Oferta Solar 2.0 - Propuesta Samara - ' + dealname,
 						deal_folder_structure.samara_proposal.editables_folder_id,
 					);
 
 					var rich_text_project_folder = `<p><a href=\"${projectFolderUrl}\" rel=\"ugc noopener\" target=\"_blank\">${dealname}</a></p>`;
-					var linkToOfferBuilderWebApp = `https://script.google.com/a/macros/samara.energy/s/${project_offer_builder_id}/exec?offer_builder_id=${offer_builder_id}&deal_name=${dealname}&deal_id=${dealId}&offer_builder_version=${offer_builder_version}`;
+					var linkToOfferBuilderWebApp = `https://script.google.com/a/macros/samara.energy/s/${PROJECT_OFFER_BUILDER_ID}/exec?offer_builder_id=${offer_builder_id}&deal_name=${dealname}&deal_id=${dealId}&OFFER_BUILDER_VERSION=${OFFER_BUILDER_VERSION}`;
 					var hyperlinkToOfferBuilderWebApp = SpreadsheetApp.newRichTextValue()
 						.setText('Click here to open Offer Builder WebApp')
 						.setLinkUrl(linkToOfferBuilderWebApp)
@@ -721,7 +712,7 @@ function processNewDiscoveryCallForm() {
 							'thidpartner_payments_folder_id',
 							deal_folder_structure.subsidies_taxes.thidpartner_payments_folder_id,
 						);
-						offer_builder.addDeveloperMetadata('offer_builder_version', offer_builder_version);
+						offer_builder.addDeveloperMetadata('OFFER_BUILDER_VERSION', OFFER_BUILDER_VERSION);
 						offer_builder_input_data_sheet.getRange('C2').setValue(dealId);
 						offer_builder_input_data_sheet.getRange('C3').setValue(proposal_slides_id);
 						offer_builder_input_data_sheet.getRange('B6').setRichTextValue(hyperlinkToOfferBuilderWebApp);
@@ -910,7 +901,7 @@ function processNewDiscoveryCallForm() {
 						sales_call_task_id: hs_salesCallTask.id,
 						project_folder_url: projectFolderUrl,
 						project_folder: rich_text_project_folder,
-						offer_builder_template_id: offer_builder_id,
+						OFFER_BUILDER_TEMPLATE_ID: offer_builder_id,
 						energy_advisor: hubspotOwnerId,
 					},
 				};
