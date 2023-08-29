@@ -12,12 +12,7 @@ class Student{
     /*
         Método constructor de la clase Student que recibe como parámetro un objeto con los valores de los atributos de la clase.
     */
-    constructor({
-        name,
-        cursosAprobados = [],
-        age,
-        email,
-    }) {
+    constructor({name, cursosAprobados = [], age, email}) {
         this.name = name;
         this.email = email;
         this.age = age;
