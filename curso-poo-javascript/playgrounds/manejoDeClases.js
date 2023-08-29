@@ -7,14 +7,8 @@ class Banda {
   
     agregarIntegrante(integranteNuevo) {
       
-      if (integranteNuevo.instrumento === "Bateria") {
-        for (let i = 0; i < this.integrantes.length; i++){
-          if (this.integrantes[i].instrumento === "Bateria")
-            return false;
-        }
-      } 
-      this.integrantes.push(integranteNuevo);
-      return true;
+      if (this.integrantes.every(integrante => integrante.instrumento !== 'Bateria'))
+        this.integrantes.push(integranteNuevo);
   
     }
   }
