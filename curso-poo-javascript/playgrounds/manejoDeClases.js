@@ -7,9 +7,9 @@ class Banda {
   
     agregarIntegrante(integranteNuevo) {
       
-      if (integranteNuevo.getInstrumento() === "Bateria") {
+      if (integranteNuevo.instrumento === "Bateria") {
         for (let i = 0; i < this.integrantes.length; i++){
-          if (this.integrantes[i].getInstrumento() === "Bateria")
+          if (this.integrantes[i].instrumento === "Bateria")
             return false;
         }
       } 
@@ -24,10 +24,6 @@ class Banda {
     constructor({nombre, instrumento}) {
       this.nombre = nombre;
       this.instrumento = instrumento;
-    }
-  
-    getInstrumento() {
-      return this.instrumento;
     }
   }
   
