@@ -583,25 +583,6 @@ function processNewDiscoveryCallForm() {
 				Logger.log(salesCallMeeting);
 
 				// Create Project Drive Folder from template with a copy of Offer Builder Sheet template and Presentation Slides Template
-				var searchDealData = {
-					filterGroups: [
-						{
-							filters: [
-								{
-									propertyName: 'pipeline',
-									operator: 'EQ',
-									value: 'default',
-								},
-								{
-									propertyName: 'hs_object_id',
-									operator: 'EQ',
-									value: dealId,
-								},
-							],
-						},
-					],
-					properties: ['dealname'],
-				};
 				var deal_params = `associations=contacts&properties=dealname`;
 				try {
 					var deal = Samara.getHubSpotDeal(dealId, deal_params);
